@@ -7,7 +7,6 @@ $update = file_get_contents("php://input");
 print_r($update);
 $updatevar = json_decode($update,TRUE);
 print_r($updatevar);
-$text = $updatevar["result"][200]["message"]["chat"]["id"];
+//$text = $updatevar["result"][200]["message"]["chat"]["id"];
 file_get_contents($website."/sendmessage?chat_id=144983285&text=web hook");
-print_r($text);
 ?>
