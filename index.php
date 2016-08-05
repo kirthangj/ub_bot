@@ -16,14 +16,14 @@ var_dump($chatid);
 $message=$update["message"] ["text"];
 var_dump($message);
 switch($message){
-	case "/test":
-		sendmess($chatid,"test");
-		break;
 	case "/hi":
-		sendmess($chatid,"hey there");
+		sendmess($chatid,"hello");
+		break;
+	case "/bye":
+		sendmess($chatid,"bye");
 		break;
 	default:
-		sendmess($chatid,"default");
+		sendmess($chatid,"enter one of the above");
 
 	
 }
