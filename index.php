@@ -1,7 +1,7 @@
 <?php
 
 ini_set('error_reporting',E_ALL);
-$botToken = "215663608:AAFFBj8OXQ2HbT3Cj2lmydwVeP4V2CDOaOo";
+$botToken = "242900232:AAGfh68XLX2OLP38cFEIaY0NPBOVRMPrv3g";
 $website = "https://api.telegram.org/bot".$botToken;
 //$update = file_get_contents($website."/getupdates");
 //print_r($update);
@@ -13,9 +13,9 @@ $update = json_decode($update,TRUE);
 print_r($update);
 $chatid = $update["message"] ["chat"]["id"];
 var_dump($chatid);
-$messgae=$update["message"] ["text"];
-var_dump($messgae);
-switch($messgae){
+$message=$update["message"] ["text"];
+var_dump($message);
+switch($message){
 	case "/test":
 		sendmess($chatid,"test");
 		break;
