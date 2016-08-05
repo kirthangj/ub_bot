@@ -5,14 +5,16 @@ $botToken = "215663608:AAFFBj8OXQ2HbT3Cj2lmydwVeP4V2CDOaOo";
 $website = "https://api.telegram.org/bot".$botToken;
 //$update = file_get_contents($website."/getupdates");
 //print_r($update);
+var_dump($website);
 $update = file_get_contents("php://input");
 print_r($update);
 var_dump($update);
 $update = json_decode($update,TRUE);
 print_r($update);
-$chatid = $update["message"]["chat"]["id"];
+$chatid = $update["message"] ["chat"]["id"];
 var_dump($chatid);
-$messgae=$update["message"]["text"];
+$messgae=$update["message"] ["text"];
+var_dump($messgae);
 switch($messgae){
 	case "/test":
 		sendmess($chatid,"test");
@@ -29,7 +31,7 @@ switch($messgae){
 
 function sendmess ($chatid,$mess)
 {
-   $url = $GLOBALS["website"]."/sendmessage?chat_id=144983285&text=".urlencode($mess);
+   $url = $GLOBALS["website"]."/sendmessage?chat_id=".$chatid."&text=".urlencode($mess);
    var_dump($url); 
    file_get_contents($url);
 }    
