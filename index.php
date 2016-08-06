@@ -1,39 +1,45 @@
 <?php
+require_once('Telegram.php');
 
-ini_set('error_reporting',E_ALL);
-$botToken = "242900232:AAGfh68XLX2OLP38cFEIaY0NPBOVRMPrv3g";
-$website = "https://api.telegram.org/bot".$botToken;
-//$update = file_get_contents($website."/getupdates");
-//print_r($update);
-var_dump($website);
-$update = file_get_contents("php://input");
-print_r($update);
-var_dump($update);
-$update = json_decode($update,TRUE);
-print_r($update);
-$chatid = $update["message"] ["chat"]["id"];
-var_dump($chatid);
-$message=$update["message"] ["text"];
-var_dump($message);
-switch($message){
-	case "/hi":
-		sendmess($chatid,"hello");
-		break;
-	case "/bye":
-		sendmess($chatid,"bye");
-		break;
-	default:
-		sendmess($chatid,"enter one of the above");
+// Set the bot TOKEN
+$bot_id = "242900232:AAGfh68XLX2OLP38cFEIaY0NPBOVRMPrv3g";
+// Instances the class
+$telegram = new Telegram($bot_id);
 
-	
+/* If you need to manually take some parameters
+*  $result = $telegram->getData();
+*  $text = $result["message"] ["text"];
+*  $chat_id = $result["message"] ["chat"]["id"];
+*/
+
+// Take text and chat_id from the message
+$text = $telegram->Text();
+$chat_id = $telegram->ChatID();
+
+if ($text == "/start") {
+    $option = array( array("\xF0\x9F\x90\xAE"), array("Git", "Credit") );
+    // Create a permanent custom keyboard
+    $keyb = $telegram->buildKeyBoard($option, $onetime=false);
+    $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "Welcome to CowBot \xF0\x9F\x90\xAE \nPlease type /cowsay or click the Cow button !");
+    $telegram->sendMessage($content);
 }
-//$text = $updatevar["result"][200]["message"]["chat"]["id"];
+if ($text == "/cowsay" || $text == "\xF0\x9F\x90\xAE" ) {
+    $randstring = rand() . sha1(time());
+    $cowurl = "http://bangame.altervista.org/cowsay/fortune_image_w.php?preview=".$randstring;
+    $content = array('chat_id' => $chat_id, 'text' => $cowurl);
+    $telegram->sendMessage($content);
+}
+if ($text == "/credit" || $text == "Credit") {
+    $reply = "Eleirbag89 Telegram PHP API http://telegrambot.ienadeprex.com \nFrancesco Laurita (for the cowsay script) http://francesco-laurita.info/wordpress/fortune-cowsay-on-php-5";
+    $content = array('chat_id' => $chat_id, 'text' => $reply);
+    $telegram->sendMessage($content);
+}
 
-function sendmess ($chatid,$mess)
-{
-   $url = $GLOBALS["website"]."/sendmessage?chat_id=".$chatid."&text=".urlencode($mess);
-   var_dump($url); 
-   file_get_contents($url);
-}    
+if ($text == "/git" || $text == "Git") {
+    $reply = "Check me on GitHub: https://github.com/Eleirbag89/TelegramBotPHP";
+    $content = array('chat_id' => $chat_id, 'text' => $reply);
+    $telegram->sendMessage($content);
+}
 
 ?>
+
