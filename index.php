@@ -1,5 +1,9 @@
 <?php
-require_once('Telegram.php');
+/**
+ * Telegram Bot example.
+ * @author Gabriele Grillo <gabry.grillo@alice.it>
+ */
+include("Telegram.php");
 
 // Set the bot TOKEN
 $bot_id = "242900232:AAGfh68XLX2OLP38cFEIaY0NPBOVRMPrv3g";
@@ -16,29 +20,44 @@ $telegram = new Telegram($bot_id);
 $text = $telegram->Text();
 $chat_id = $telegram->ChatID();
 
-if ($text == "/start") {
-    $option = array( array("\xF0\x9F\x90\xAE"), array("Git", "Credit") );
-    // Create a permanent custom keyboard
-    $keyb = $telegram->buildKeyBoard($option, $onetime=false);
-    $content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => "Welcome to CowBot \xF0\x9F\x90\xAE \nPlease type /cowsay or click the Cow button !");
-    $telegram->sendMessage($content);
-}
-if ($text == "/cowsay" || $text == "\xF0\x9F\x90\xAE" ) {
-    $randstring = rand() . sha1(time());
-    $cowurl = "http://bangame.altervista.org/cowsay/fortune_image_w.php?preview=".$randstring;
-    $content = array('chat_id' => $chat_id, 'text' => $cowurl);
-    $telegram->sendMessage($content);
-}
-if ($text == "/credit" || $text == "Credit") {
-    $reply = "Eleirbag89 Telegram PHP API http://telegrambot.ienadeprex.com \nFrancesco Laurita (for the cowsay script) http://francesco-laurita.info/wordpress/fortune-cowsay-on-php-5";
-    $content = array('chat_id' => $chat_id, 'text' => $reply);
-    $telegram->sendMessage($content);
-}
-
-if ($text == "/git" || $text == "Git") {
-    $reply = "Check me on GitHub: https://github.com/Eleirbag89/TelegramBotPHP";
-    $content = array('chat_id' => $chat_id, 'text' => $reply);
-    $telegram->sendMessage($content);
+// Check if the text is a command
+if(!is_null($text) && !is_null($chat_id)){
+	if ($text == "/test") {
+		if ($telegram->messageFromGroup()) {
+			$reply = "Chat Group";
+		} else {
+			$reply = "Private Chat";
+		}
+	        // Create option for the custom keyboard. Array of array string
+	        $option = array( array("A", "B"), array("C", "D") );
+	        // Get the keyboard
+		$keyb = $telegram->buildKeyBoard($option);
+		$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => $reply);
+		$telegram->sendMessage($content);
+	}
+	if ($text == "/git") {
+	    $reply = "Check me on GitHub: https://github.com/Eleirbag89/TelegramBotPHP";
+	    // Build the reply array
+	    $content = array('chat_id' => $chat_id, 'text' => $reply);
+	    $telegram->sendMessage($content);
+	}
+	
+	if ($text == "/img") {
+	    // Load a local file to upload. If is already on Telegram's Servers just pass the resource id
+	    $img = curl_file_create('test.png','image/png'); 
+	    $content = array('chat_id' => $chat_id, 'photo' => $img );
+	    $telegram->sendPhoto($content);
+	    //Download the file just sended
+	    $file_id = $message["photo"][0]["file_id"];
+	    $file = $telegram->getFile($file_id);
+	    $telegram->downloadFile($file["file_path"], "./test_download.png");
+	}
+	
+	if ($text == "/where") {
+	    // Send the Catania's coordinate
+	    $content = array('chat_id' => $chat_id, 'latitude' => "37.5", 'longitude' => "15.1" );
+	    $telegram->sendLocation($content);
+	}
 }
 
 ?>
