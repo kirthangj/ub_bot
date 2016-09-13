@@ -27,7 +27,7 @@ class Telegram {
         return json_decode($reply, true);
     }
 
-    /// A method for testing your bot.
+    /// A method for testing bot.
     /**
      * A simple method for testing your bot's auth token. Requires no parameters. 
      * Returns basic information about the bot in form of a User object.

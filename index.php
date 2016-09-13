@@ -1,8 +1,4 @@
 <?php
-/**
- * Telegram Bot example.
- * @author Gabriele Grillo <gabry.grillo@alice.it>
- */
 include("Telegram.php");
 
 // Set the bot TOKEN
@@ -10,7 +6,7 @@ $bot_id = "242900232:AAGfh68XLX2OLP38cFEIaY0NPBOVRMPrv3g";
 // Instances the class
 $telegram = new Telegram($bot_id);
 
-/* If you need to manually take some parameters
+/*  manually take some parameters
 *  $result = $telegram->getData();
 *  $text = $result["message"] ["text"];
 *  $chat_id = $result["message"] ["chat"]["id"];
@@ -35,23 +31,7 @@ if(!is_null($text) && !is_null($chat_id)){
 		$content = array('chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => $reply);
 		$telegram->sendMessage($content);
 	}
-	if ($text == "/git") {
-	    $reply = "Check me on GitHub: https://github.com/Eleirbag89/TelegramBotPHP";
-	    // Build the reply array
-	    $content = array('chat_id' => $chat_id, 'text' => $reply);
-	    $telegram->sendMessage($content);
-	}
 	
-	if ($text == "/img") {
-	    // Load a local file to upload. If is already on Telegram's Servers just pass the resource id
-	    $img = curl_file_create('test.png','image/png'); 
-	    $content = array('chat_id' => $chat_id, 'photo' => $img );
-	    $telegram->sendPhoto($content);
-	    //Download the file just sended
-	    $file_id = $message["photo"][0]["file_id"];
-	    $file = $telegram->getFile($file_id);
-	    $telegram->downloadFile($file["file_path"], "./test_download.png");
-	}
 	
 	if ($text == "/where") {
 	    // Send the Catania's coordinate
